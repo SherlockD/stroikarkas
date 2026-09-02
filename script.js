@@ -1,3 +1,86 @@
+window.initializeStroikarkas = () => {
+  if (window.__stroikarkasInitialized) {
+    return;
+  }
+
+  window.__stroikarkasInitialized = true;
+
+(() => {
+  const tabList = document.querySelector("[data-project-tabs]");
+
+  if (!tabList) {
+    return;
+  }
+
+  const tabs = Array.from(tabList.querySelectorAll("[data-project-tab]"));
+  const panels = Array.from(document.querySelectorAll("[data-project-panel]"));
+
+  if (tabs.length === 0 || panels.length === 0) {
+    return;
+  }
+
+  const selectTab = (tab, { moveFocus = false } = {}) => {
+    const category = tab.dataset.projectTab;
+    let activePanel = null;
+
+    tabs.forEach((candidate) => {
+      const isSelected = candidate === tab;
+      candidate.setAttribute("aria-selected", String(isSelected));
+      candidate.tabIndex = isSelected ? 0 : -1;
+    });
+
+    panels.forEach((panel) => {
+      const isActive = panel.dataset.projectPanel === category;
+      panel.hidden = !isActive;
+
+      if (isActive) {
+        activePanel = panel;
+      }
+    });
+
+    document.dispatchEvent(
+      new CustomEvent("project-category-change", {
+        detail: { category, panel: activePanel },
+      }),
+    );
+
+    if (moveFocus) {
+      tab.focus();
+    }
+  };
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => selectTab(tab));
+  });
+
+  tabList.addEventListener("keydown", (event) => {
+    const currentIndex = tabs.indexOf(document.activeElement);
+
+    if (currentIndex === -1) {
+      return;
+    }
+
+    let nextIndex = currentIndex;
+
+    if (event.key === "ArrowRight") {
+      nextIndex = (currentIndex + 1) % tabs.length;
+    } else if (event.key === "ArrowLeft") {
+      nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = tabs.length - 1;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    selectTab(tabs[nextIndex], { moveFocus: true });
+  });
+
+  selectTab(tabs.find((tab) => tab.getAttribute("aria-selected") === "true") ?? tabs[0]);
+})();
+
 (() => {
   const dialog = document.querySelector("[data-project-dialog]");
   const cards = Array.from(document.querySelectorAll(".project-card"));
@@ -13,6 +96,8 @@
   const dialogPackage = dialog.querySelector("[data-project-dialog-package]");
   const dialogArea = dialog.querySelector("[data-project-dialog-area]");
   const dialogPrice = dialog.querySelector("[data-project-dialog-price]");
+  const dialogDescription = dialog.querySelector("[data-project-dialog-description]");
+  const dialogFeatures = dialog.querySelector("[data-project-dialog-features]");
   const selectButton = dialog.querySelector("[data-project-select]");
   const gallery = dialog.querySelector("[data-project-dialog-gallery]");
   const galleryControls = dialog.querySelector("[data-project-dialog-gallery-controls]");
@@ -96,12 +181,26 @@
 
   const openProject = (card, trigger) => {
     const topline = card.querySelectorAll(".project-topline span");
+    const projectDetails = window.stroikarkasContent?.projectsById?.get(card.dataset.projectId);
 
     dialogIndex.textContent = topline[0]?.textContent.trim() ?? "";
     dialogArea.textContent = topline[1]?.textContent.trim() ?? "";
     dialogTitle.textContent = card.querySelector(".project-name h3")?.textContent.trim() ?? "";
     dialogPackage.textContent = card.querySelector(".project-name span")?.textContent.trim() ?? "";
     dialogPrice.textContent = card.querySelector(".project-price")?.textContent.trim() ?? "";
+    dialogDescription.textContent =
+      projectDetails?.description || "Добавьте описание проекта в content/projects.json.";
+    dialogFeatures.replaceChildren();
+
+    const projectFeatures = Array.isArray(projectDetails?.features) ? projectDetails.features : [];
+
+    projectFeatures.forEach((feature) => {
+      const item = document.createElement("li");
+      item.textContent = feature;
+      dialogFeatures.append(item);
+    });
+
+    dialogFeatures.hidden = dialogFeatures.children.length === 0;
     selectButton.setAttribute(
       "aria-label",
       `Хочу такой же проект, как ${dialogTitle.textContent}, и продолжить расчёт`,
@@ -177,14 +276,26 @@
 
     const topline = activeCard.querySelectorAll(".project-topline span");
     const areaLabel = topline[1]?.textContent.trim() ?? "";
+    const projectDetails = window.stroikarkasContent?.projectsById?.get(activeCard.dataset.projectId);
+    const parameters = projectDetails?.parameters || {};
+    const numericArea = Number(projectDetails?.area);
     const project = {
       code: activeCard.querySelector(".project-name h3")?.textContent.trim() ?? "",
-      area: areaLabel.replace(/[^\d.,]/g, ""),
+      area:
+        Number.isFinite(numericArea) && numericArea > 0
+          ? String(numericArea).replace(".", ",")
+          : "",
       areaLabel,
       buildingType:
         activeCard.dataset.buildingType ||
         activeCard.closest("[data-building-type]")?.dataset.buildingType ||
         "house",
+      length: parameters.length || activeCard.dataset.projectLength || "",
+      width: parameters.width || activeCard.dataset.projectWidth || "",
+      bathRooms: parameters.bathRooms || activeCard.dataset.bathRooms || "",
+      gazeboType: parameters.gazeboType || activeCard.dataset.gazeboType || "",
+      houseFloors: parameters.floors || "",
+      houseRooms: parameters.rooms || "",
     };
 
     projectWasSelected = true;
@@ -216,21 +327,28 @@
 })();
 
 (() => {
-  const player = document.querySelector("[data-video-player]");
-  const trigger = document.querySelector("[data-video-open]");
-  const frame = player?.querySelector("[data-video-frame]");
+  const players = Array.from(document.querySelectorAll("[data-video-player]"));
 
-  if (!player || !trigger || !frame) {
+  if (players.length === 0) {
     return;
   }
 
-  trigger.addEventListener("click", (event) => {
-    event.preventDefault();
-    frame.src = frame.dataset.src;
-    frame.hidden = false;
-    trigger.hidden = true;
-    player.classList.add("is-playing");
-    frame.focus();
+  players.forEach((player) => {
+    const trigger = player.querySelector("[data-video-open]");
+    const frame = player.querySelector("[data-video-frame]");
+
+    if (!trigger || !frame) {
+      return;
+    }
+
+    trigger.addEventListener("click", (event) => {
+      event.preventDefault();
+      frame.src = frame.dataset.src;
+      frame.hidden = false;
+      trigger.hidden = true;
+      player.classList.add("is-playing");
+      frame.focus();
+    });
   });
 })();
 
@@ -882,9 +1000,50 @@
     catalogInput.checked = true;
     projectReferenceInput.value = project.code;
 
-    if (project.buildingType === "house") {
+    let hasProjectParameters = false;
+
+    if (project.buildingType === "house" && project.area) {
       form.elements.house_area.value = project.area;
-      form.elements.house_floors.value = "По выбранному проекту";
+      form.elements.house_floors.value = project.houseFloors;
+
+      if (!form.elements.house_floors.value) {
+        form.elements.house_floors.value = "По выбранному проекту";
+      }
+
+      form.elements.house_rooms.value = project.houseRooms;
+      hasProjectParameters = Boolean(
+        form.elements.house_area.value &&
+          form.elements.house_floors.value &&
+          form.elements.house_rooms.value,
+      );
+    } else if (
+      project.buildingType === "bath" &&
+      project.length &&
+      project.width &&
+      project.bathRooms
+    ) {
+      form.elements.bath_length.value = project.length;
+      form.elements.bath_width.value = project.width;
+      form.elements.bath_rooms.value = project.bathRooms;
+      hasProjectParameters = Boolean(
+        form.elements.bath_length.value &&
+          form.elements.bath_width.value &&
+          form.elements.bath_rooms.value,
+      );
+    } else if (
+      project.buildingType === "gazebo" &&
+      project.length &&
+      project.width &&
+      project.gazeboType
+    ) {
+      form.elements.gazebo_length.value = project.length;
+      form.elements.gazebo_width.value = project.width;
+      form.elements.gazebo_type.value = project.gazeboType;
+      hasProjectParameters = Boolean(
+        form.elements.gazebo_length.value &&
+          form.elements.gazebo_width.value &&
+          form.elements.gazebo_type.value,
+      );
     }
 
     selectedCatalogProject = project;
@@ -896,7 +1055,7 @@
     success.hidden = true;
     syncObjectFields();
     syncProjectReference();
-    showStep(4);
+    showStep(hasProjectParameters ? 4 : 2);
   });
 
   form.addEventListener("submit", (event) => {
@@ -1124,11 +1283,6 @@
       variants: (index) => (index === 0 ? "left" : ["right", "scale"]),
       stagger: 110,
     },
-    {
-      root: ".footer-inner",
-      stagger: 70,
-      maxDelay: 140,
-    },
   ].forEach(prepareGroup);
 
   document.querySelectorAll(".hero-panel").forEach((item) => {
@@ -1242,6 +1396,21 @@
     true,
   );
 
+  document.addEventListener("project-category-change", (event) => {
+    const panel = event.detail?.panel;
+
+    if (!(panel instanceof Element)) {
+      return;
+    }
+
+    panel
+      .querySelectorAll('.motion-reveal[data-motion-state="pending"]')
+      .forEach((item) => {
+        revealItem(item);
+        observer.unobserve(item);
+      });
+  });
+
   const handleMotionPreference = (event) => {
     if (!event.matches) {
       return;
@@ -1258,3 +1427,4 @@
     reducedMotion.addListener(handleMotionPreference);
   }
 })();
+};

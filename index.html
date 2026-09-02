@@ -87,82 +87,14 @@
               </button>
             </div>
 
-            <div class="hero-carousel-stage" data-carousel-stage aria-live="off" aria-atomic="false">
-              <figure class="hero-project is-active" data-carousel-slide>
-                <div class="hero-media">
-                  <img
-                    src="assets/image-placeholder.png"
-                    alt="Место для изображения проекта КМП–2 в работе"
-                    width="1536"
-                    height="1024"
-                    data-image-slot="hero-project-01"
-                    fetchpriority="high"
-                  />
-                </div>
-                <figcaption class="hero-project-info">
-                  <p class="hero-project-heading">
-                    <strong>КМП–2</strong>
-                    <span class="hero-project-dot" aria-hidden="true">·</span>
-                    <span>Проект в работе</span>
-                  </p>
-                  <p class="hero-project-stage">
-                    <span>Этап: монтаж каркаса</span>
-                    <span class="hero-project-dot" aria-hidden="true">·</span>
-                    <strong>65 м²</strong>
-                  </p>
-                </figcaption>
-              </figure>
-
-              <figure class="hero-project" data-carousel-slide hidden>
-                <div class="hero-media">
-                  <img
-                    src="assets/image-placeholder.png"
-                    alt="Место для изображения второго проекта в работе"
-                    width="1536"
-                    height="1024"
-                    data-image-slot="hero-project-02"
-                    loading="lazy"
-                  />
-                </div>
-                <figcaption class="hero-project-info">
-                  <p class="hero-project-heading">
-                    <strong>СКТ–65</strong>
-                    <span class="hero-project-dot" aria-hidden="true">·</span>
-                    <span>Проект в работе</span>
-                  </p>
-                  <p class="hero-project-stage">
-                    <span>Этап: добавьте актуальный статус</span>
-                    <span class="hero-project-dot" aria-hidden="true">·</span>
-                    <strong>65,68 м²</strong>
-                  </p>
-                </figcaption>
-              </figure>
-
-              <figure class="hero-project" data-carousel-slide hidden>
-                <div class="hero-media">
-                  <img
-                    src="assets/image-placeholder.png"
-                    alt="Место для изображения третьего проекта в работе"
-                    width="1536"
-                    height="1024"
-                    data-image-slot="hero-project-03"
-                    loading="lazy"
-                  />
-                </div>
-                <figcaption class="hero-project-info">
-                  <p class="hero-project-heading">
-                    <strong>СКА–45</strong>
-                    <span class="hero-project-dot" aria-hidden="true">·</span>
-                    <span>Проект в работе</span>
-                  </p>
-                  <p class="hero-project-stage">
-                    <span>Этап: добавьте актуальный статус</span>
-                    <span class="hero-project-dot" aria-hidden="true">·</span>
-                    <strong>46,17 м²</strong>
-                  </p>
-                </figcaption>
-              </figure>
-            </div>
+            <div
+              class="hero-carousel-stage"
+              data-carousel-stage
+              data-current-builds
+              aria-live="off"
+              aria-atomic="false"
+              aria-busy="true"
+            ></div>
           </aside>
         </div>
       </section>
@@ -287,228 +219,23 @@
           </p>
         </div>
 
-        <div class="shell project-grid" data-building-type="house">
-          <article class="project-card">
-            <div class="project-topline">
-              <span>01</span><span>65,68 м²</span>
-            </div>
-            <img src="assets/image-placeholder.png" alt="Место для изображения проекта СКТ–65" width="1536" height="1024" loading="lazy" data-image-slot="project-skt-65" />
-            <template data-project-gallery>
-              <img src="assets/image-placeholder.png" alt="Место для фотографии проекта СКТ–65 со стороны террасы" data-image-slot="project-skt-65-view-02" />
-              <img src="assets/image-placeholder.png" alt="Место для изображения планировки проекта СКТ–65" data-image-slot="project-skt-65-plan" data-image-fit="contain" />
-            </template>
-            <div class="project-name">
-              <h3>СКТ–65</h3>
-              <span>Базовая комплектация</span>
-            </div>
-            <p class="project-price" aria-describedby="catalog-price-note">1 380 тыс. ₽</p>
-            <button class="project-card-open" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog" aria-label="Открыть проект СКТ–65">
-              <span>Подробнее</span>
-              <span class="project-card-open-icon" aria-hidden="true">
-                <svg class="ui-icon" viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </span>
-            </button>
-          </article>
-          <article class="project-card">
-            <div class="project-topline">
-              <span>02</span><span>59,69 м²</span>
-            </div>
-            <img src="assets/image-placeholder.png" alt="Место для изображения проекта СКА–60" width="1536" height="1024" loading="lazy" data-image-slot="project-ska-60" />
-            <template data-project-gallery>
-              <img src="assets/image-placeholder.png" alt="Место для фотографии фасада проекта СКА–60" data-image-slot="project-ska-60-view-02" />
-              <img src="assets/image-placeholder.png" alt="Место для изображения планировки проекта СКА–60" data-image-slot="project-ska-60-plan" data-image-fit="contain" />
-            </template>
-            <div class="project-name">
-              <h3>СКА–60</h3>
-              <span>Базовая комплектация</span>
-            </div>
-            <p class="project-price" aria-describedby="catalog-price-note">1 633 тыс. ₽</p>
-            <button class="project-card-open" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog" aria-label="Открыть проект СКА–60">
-              <span>Подробнее</span>
-              <span class="project-card-open-icon" aria-hidden="true">
-                <svg class="ui-icon" viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </span>
-            </button>
-          </article>
-          <article class="project-card">
-            <div class="project-topline">
-              <span>03</span><span>101,94 м²</span>
-            </div>
-            <img src="assets/image-placeholder.png" alt="Место для изображения проекта СКО–100" width="1536" height="1024" loading="lazy" data-image-slot="project-sko-100" />
-            <template data-project-gallery>
-              <img src="assets/image-placeholder.png" alt="Место для фотографии проекта СКО–100 со стороны входа" data-image-slot="project-sko-100-view-02" />
-              <img src="assets/image-placeholder.png" alt="Место для изображения планировки проекта СКО–100" data-image-slot="project-sko-100-plan" data-image-fit="contain" />
-            </template>
-            <div class="project-name">
-              <h3>СКО–100</h3>
-              <span>Базовая комплектация</span>
-            </div>
-            <p class="project-price" aria-describedby="catalog-price-note">1 802 тыс. ₽</p>
-            <button class="project-card-open" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog" aria-label="Открыть проект СКО–100">
-              <span>Подробнее</span>
-              <span class="project-card-open-icon" aria-hidden="true">
-                <svg class="ui-icon" viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </span>
-            </button>
-          </article>
-          <article class="project-card">
-            <div class="project-topline">
-              <span>04</span><span>46,17 м²</span>
-            </div>
-            <img src="assets/image-placeholder.png" alt="Место для изображения проекта СКА–45" width="1536" height="1024" loading="lazy" data-image-slot="project-ska-45" />
-            <div class="project-name">
-              <h3>СКА–45</h3>
-              <span>Базовая комплектация</span>
-            </div>
-            <p class="project-price" aria-describedby="catalog-price-note">1 362 тыс. ₽</p>
-            <button class="project-card-open" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog" aria-label="Открыть проект СКА–45">
-              <span>Подробнее</span>
-              <span class="project-card-open-icon" aria-hidden="true">
-                <svg class="ui-icon" viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </span>
-            </button>
-          </article>
-          <article class="project-card">
-            <div class="project-topline">
-              <span>05</span><span>66,61 м²</span>
-            </div>
-            <img src="assets/image-placeholder.png" alt="Место для изображения проекта СКМ–65" width="1536" height="1024" loading="lazy" data-image-slot="project-skm-65" />
-            <div class="project-name">
-              <h3>СКМ–65</h3>
-              <span>Базовая комплектация</span>
-            </div>
-            <p class="project-price" aria-describedby="catalog-price-note">1 395 тыс. ₽</p>
-            <button class="project-card-open" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog" aria-label="Открыть проект СКМ–65">
-              <span>Подробнее</span>
-              <span class="project-card-open-icon" aria-hidden="true">
-                <svg class="ui-icon" viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </span>
-            </button>
-          </article>
-          <article class="project-card">
-            <div class="project-topline">
-              <span>06</span><span>24,02 м²</span>
-            </div>
-            <img src="assets/image-placeholder.png" alt="Место для изображения проекта СКМ–25" width="1536" height="1024" loading="lazy" data-image-slot="project-skm-25" />
-            <div class="project-name">
-              <h3>СКМ–25</h3>
-              <span>Базовая комплектация</span>
-            </div>
-            <p class="project-price" aria-describedby="catalog-price-note">897 тыс. ₽</p>
-            <button class="project-card-open" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog" aria-label="Открыть проект СКМ–25">
-              <span>Подробнее</span>
-              <span class="project-card-open-icon" aria-hidden="true">
-                <svg class="ui-icon" viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </span>
-            </button>
-          </article>
-          <article class="project-card">
-            <div class="project-topline">
-              <span>07</span><span>37,66 м²</span>
-            </div>
-            <img src="assets/image-placeholder.png" alt="Место для изображения проекта СКН–35" width="1536" height="1024" loading="lazy" data-image-slot="project-skn-35" />
-            <div class="project-name">
-              <h3>СКН–35</h3>
-              <span>Базовая комплектация</span>
-            </div>
-            <p class="project-price" aria-describedby="catalog-price-note">1 109 тыс. ₽</p>
-            <button class="project-card-open" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog" aria-label="Открыть проект СКН–35">
-              <span>Подробнее</span>
-              <span class="project-card-open-icon" aria-hidden="true">
-                <svg class="ui-icon" viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </span>
-            </button>
-          </article>
-          <article class="project-card">
-            <div class="project-topline">
-              <span>08</span><span>85,19 м²</span>
-            </div>
-            <img src="assets/image-placeholder.png" alt="Место для изображения проекта СКУ–85" width="1536" height="1024" loading="lazy" data-image-slot="project-sku-85" />
-            <div class="project-name">
-              <h3>СКУ–85</h3>
-              <span>Базовая комплектация</span>
-            </div>
-            <p class="project-price" aria-describedby="catalog-price-note">1 578 тыс. ₽</p>
-            <button class="project-card-open" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog" aria-label="Открыть проект СКУ–85">
-              <span>Подробнее</span>
-              <span class="project-card-open-icon" aria-hidden="true">
-                <svg class="ui-icon" viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </span>
-            </button>
-          </article>
-          <article class="project-card">
-            <div class="project-topline">
-              <span>09</span><span>13,69 м²</span>
-            </div>
-            <img src="assets/image-placeholder.png" alt="Место для изображения проекта СКМ–15" width="1536" height="1024" loading="lazy" data-image-slot="project-skm-15" />
-            <div class="project-name">
-              <h3>СКМ–15</h3>
-              <span>Базовая комплектация</span>
-            </div>
-            <p class="project-price" aria-describedby="catalog-price-note">624 тыс. ₽</p>
-            <button class="project-card-open" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog" aria-label="Открыть проект СКМ–15">
-              <span>Подробнее</span>
-              <span class="project-card-open-icon" aria-hidden="true">
-                <svg class="ui-icon" viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </span>
-            </button>
-          </article>
-          <article class="project-card">
-            <div class="project-topline">
-              <span>10</span><span>40,67 м²</span>
-            </div>
-            <img src="assets/image-placeholder.png" alt="Место для изображения проекта СКС–40" width="1536" height="1024" loading="lazy" data-image-slot="project-sks-40" />
-            <div class="project-name">
-              <h3>СКС–40</h3>
-              <span>Базовая комплектация</span>
-            </div>
-            <p class="project-price" aria-describedby="catalog-price-note">1 137 тыс. ₽</p>
-            <button class="project-card-open" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog" aria-label="Открыть проект СКС–40">
-              <span>Подробнее</span>
-              <span class="project-card-open-icon" aria-hidden="true">
-                <svg class="ui-icon" viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </span>
-            </button>
-          </article>
-        </div>
+        <div
+          class="shell project-category-tabs"
+          role="tablist"
+          aria-label="Категории проектов"
+          aria-orientation="horizontal"
+          data-project-tabs
+          aria-busy="true"
+        ></div>
 
+        <div data-project-panels></div>
         <dialog class="project-dialog" id="project-dialog" data-project-dialog aria-labelledby="project-dialog-title">
           <div class="project-dialog-layout">
             <button class="project-dialog-close" type="button" data-project-dialog-close aria-label="Закрыть карточку проекта">
               <span aria-hidden="true">×</span>
             </button>
             <div class="project-dialog-media" data-project-dialog-gallery>
-              <img src="assets/image-placeholder.png" alt="" width="1536" height="1024" data-project-dialog-image />
+              <img src="assets/image-placeholder.png" alt="" width="1448" height="1086" data-project-dialog-image />
               <div class="project-dialog-gallery-controls" data-project-dialog-gallery-controls hidden>
                 <button type="button" data-project-dialog-gallery-prev aria-label="Предыдущее изображение проекта">
               <span aria-hidden="true">
@@ -538,12 +265,13 @@
                 </div>
                 <div>
                   <dt>Стоимость</dt>
-                  <dd data-project-dialog-price aria-describedby="catalog-price-note">1 380 тыс. ₽</dd>
+                  <dd data-project-dialog-price aria-describedby="catalog-price-note">1 380 000 ₽</dd>
                 </div>
               </dl>
               <div class="project-dialog-placeholder">
                 <span>О проекте</span>
-                <p>Подробная информация о проекте скоро появится.</p>
+                <p data-project-dialog-description></p>
+                <ul class="project-dialog-features" data-project-dialog-features></ul>
               </div>
               <button class="button button-primary project-dialog-select" type="button" data-project-select>
                 <span>Хочу такой же</span>
@@ -579,57 +307,12 @@
               </span>
             </a>
           </div>
-          <div class="project-ledger" aria-label="Примеры реализованных проектов">
-            <article class="project-video-card">
-              <div class="project-video-player" data-video-player>
-                <a
-                  class="project-video-link"
-                  href="https://rutube.ru/video/06d164d7f38cc53c06001636a917710f/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-video-open
-                  aria-controls="kmp-2-video-frame"
-                  aria-label="Запустить видеообзор готового дома КМП–2 в этом блоке, длительность 1 минута 16 секунд"
-                >
-                  <img
-                    src="assets/kmp-2-video-cover.jpg"
-                    alt=""
-                    width="1280"
-                    height="720"
-                    loading="lazy"
-                  />
-                  <span class="project-video-play" aria-hidden="true">
-                    <span class="video-play-mark">
-                      <svg class="video-play-icon" viewBox="0 0 24 24" focusable="false">
-                        <path d="m9 7 8 5-8 5z" />
-                      </svg>
-                    </span>
-                  </span>
-                  <span class="project-video-duration" aria-hidden="true">1:16</span>
-                </a>
-                <iframe
-                  class="project-video-embed"
-                  id="kmp-2-video-frame"
-                  title="Видеообзор готового дома КМП–2"
-                  data-video-frame
-                  data-src="https://rutube.ru/play/embed/06d164d7f38cc53c06001636a917710f?autoplay=1"
-                  allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-                  allowfullscreen
-                  referrerpolicy="strict-origin-when-cross-origin"
-                  hidden
-                ></iframe>
-              </div>
-              <span>Видеообзор</span>
-              <p>КМП–2</p>
-              <small>Готовый дом · 1 минута 16 секунд</small>
-            </article>
-            <article><img src="assets/image-placeholder.png" alt="Место для фотографии реализованного садового дома" width="1536" height="1024" loading="lazy" data-image-slot="completed-01" /><span>01</span><p>Садовый дом</p><small>Реализован</small></article>
-            <article><img src="assets/image-placeholder.png" alt="Место для фотографии реализованного дома с мансардой" width="1536" height="1024" loading="lazy" data-image-slot="completed-02" /><span>02</span><p>Дом с мансардой</p><small>Реализован</small></article>
-            <article><img src="assets/image-placeholder.png" alt="Место для фотографии реализованного дома с террасой" width="1536" height="1024" loading="lazy" data-image-slot="completed-03" /><span>03</span><p>Дом с террасой</p><small>Реализован</small></article>
-            <article><img src="assets/image-placeholder.png" alt="Место для фотографии реализованного компактного дома" width="1536" height="1024" loading="lazy" data-image-slot="completed-04" /><span>04</span><p>Компактный дом</p><small>Реализован</small></article>
-            <article><img src="assets/image-placeholder.png" alt="Место для фотографии реализованного семейного дома" width="1536" height="1024" loading="lazy" data-image-slot="completed-05" /><span>05</span><p>Семейный дом</p><small>Реализован</small></article>
-            <article><img src="assets/image-placeholder.png" alt="Место для фотографии реализованного загородного дома" width="1536" height="1024" loading="lazy" data-image-slot="completed-06" /><span>06</span><p>Загородный дом</p><small>Реализован</small></article>
-          </div>
+          <div
+            class="project-ledger"
+            aria-label="Примеры реализованных проектов"
+            data-completed-projects
+            aria-busy="true"
+          ></div>
         </div>
       </section>
 
@@ -672,63 +355,14 @@
             </button>
           </div>
 
-          <div class="review-carousel-stage" data-carousel-stage aria-live="off" aria-atomic="false">
-            <article class="review-feature is-active" data-carousel-slide>
-              <div class="review-quote">
-                <span class="review-label">Отзыв клиента · Йошкар-Ола</span>
-                <span class="review-mark" aria-hidden="true">“</span>
-                <blockquote>
-                  Постройка прошла без нервов и лишних затрат времени. Специалисты
-                  предложили рациональные решения и хорошую смету. Дом тёплый и
-                  уютный, спасибо «СтройКаркас».
-                </blockquote>
-                <footer class="review-author">
-                  <strong>Елена</strong>
-                  <span>Владелица загородного дома</span>
-                </footer>
-              </div>
-              <figure class="review-media">
-                <img src="assets/image-placeholder.png" alt="Место для фотографии дома Елены" width="1536" height="1024" loading="lazy" data-image-slot="review-01" />
-                <figcaption>Дом клиента · фото будет добавлено</figcaption>
-              </figure>
-            </article>
-
-            <article class="review-feature" data-carousel-slide hidden>
-              <div class="review-quote">
-                <span class="review-label">Следующий отзыв · добавьте город</span>
-                <span class="review-mark" aria-hidden="true">“</span>
-                <blockquote>
-                  Добавьте сюда подтверждённый текст второго отзыва клиента.
-                </blockquote>
-                <footer class="review-author">
-                  <strong>Имя клиента</strong>
-                  <span>Добавьте описание проекта</span>
-                </footer>
-              </div>
-              <figure class="review-media">
-                <img src="assets/image-placeholder.png" alt="Место для фотографии ко второму отзыву" width="1536" height="1024" loading="lazy" data-image-slot="review-02" />
-                <figcaption>Дом клиента · фото будет добавлено</figcaption>
-              </figure>
-            </article>
-
-            <article class="review-feature" data-carousel-slide hidden>
-              <div class="review-quote">
-                <span class="review-label">Ещё один отзыв · добавьте город</span>
-                <span class="review-mark" aria-hidden="true">“</span>
-                <blockquote>
-                  Добавьте сюда подтверждённый текст третьего отзыва клиента.
-                </blockquote>
-                <footer class="review-author">
-                  <strong>Имя клиента</strong>
-                  <span>Добавьте описание проекта</span>
-                </footer>
-              </div>
-              <figure class="review-media">
-                <img src="assets/image-placeholder.png" alt="Место для фотографии к третьему отзыву" width="1536" height="1024" loading="lazy" data-image-slot="review-03" />
-                <figcaption>Дом клиента · фото будет добавлено</figcaption>
-              </figure>
-            </article>
-          </div>
+          <div
+            class="review-carousel-stage"
+            data-carousel-stage
+            data-reviews
+            aria-live="off"
+            aria-atomic="false"
+            aria-busy="true"
+          ></div>
         </div>
       </section>
 
@@ -881,20 +515,14 @@
               </button>
             </div>
 
-            <div class="construction-carousel-stage" data-carousel-stage aria-live="off" aria-atomic="false">
-              <figure class="placeholder-frame is-active" data-carousel-slide>
-                <img src="assets/image-placeholder.png" alt="Место для фотографии монтажа каркаса" width="1536" height="1024" loading="lazy" data-image-slot="construction-progress-01" />
-                <figcaption><span>Фото будет добавлено позже</span><small>Монтаж каркаса</small></figcaption>
-              </figure>
-              <figure class="placeholder-frame" data-carousel-slide hidden>
-                <img src="assets/image-placeholder.png" alt="Место для фотографии устройства кровли" width="1536" height="1024" loading="lazy" data-image-slot="construction-progress-02" />
-                <figcaption><span>Фото будет добавлено позже</span><small>Устройство кровли</small></figcaption>
-              </figure>
-              <figure class="placeholder-frame" data-carousel-slide hidden>
-                <img src="assets/image-placeholder.png" alt="Место для фотографии отделки дома" width="1536" height="1024" loading="lazy" data-image-slot="construction-progress-03" />
-                <figcaption><span>Фото будет добавлено позже</span><small>Внешняя отделка</small></figcaption>
-              </figure>
-            </div>
+            <div
+              class="construction-carousel-stage"
+              data-carousel-stage
+              data-construction-updates
+              aria-live="off"
+              aria-atomic="false"
+              aria-busy="true"
+            ></div>
             <span class="carousel-progress construction-carousel-progress" data-carousel-progress aria-hidden="true"><span></span></span>
           </div>
         </div>
@@ -1425,5 +1053,6 @@
     </a>
 
     <script src="script.js"></script>
+    <script src="content-loader.js"></script>
   </body>
 </html>

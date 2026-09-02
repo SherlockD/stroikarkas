@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "update-frame-example",
+      "title": "Каркасный дом · пример публикации",
+      "stage": "Сборка каркаса",
+      "image": {
+        "src": "assets/construction/frame-assembly-example.webp",
+        "alt": "Сборка деревянного каркаса одноэтажного дома на стройплощадке"
+      },
+      "published": true,
+      "example": true,
+      "order": 1
+    },
+    {
+      "id": "update-roof-example",
+      "title": "Каркасный дом · пример публикации",
+      "stage": "Монтаж кровли",
+      "image": {
+        "src": "assets/construction/roof-installation-example.webp",
+        "alt": "Монтаж металлической кровли на строящемся каркасном доме"
+      },
+      "published": true,
+      "example": true,
+      "order": 2
+    },
+    {
+      "id": "update-facade-example",
+      "title": "Каркасный дом · пример публикации",
+      "stage": "Внешняя отделка",
+      "image": {
+        "src": "assets/construction/facade-installation-example.webp",
+        "alt": "Монтаж деревянной фасадной отделки на каркасном доме"
+      },
+      "published": true,
+      "example": true,
+      "order": 3
+    }
+  ]
+}

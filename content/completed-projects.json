@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "kmp-2-video",
+      "type": "video",
+      "title": "КМП–2",
+      "status": "Готовый дом · 1 минута 16 секунд",
+      "label": "Видеообзор",
+      "cover": "assets/kmp-2-video-cover.jpg",
+      "coverAlt": "",
+      "url": "https://rutube.ru/video/06d164d7f38cc53c06001636a917710f/",
+      "embedUrl": "https://rutube.ru/play/embed/06d164d7f38cc53c06001636a917710f?autoplay=1",
+      "duration": "1:16",
+      "published": true,
+      "order": 1
+    },
+    {
+      "id": "completed-house-example",
+      "type": "photo",
+      "title": "Садовый дом",
+      "status": "Пример кейса",
+      "image": {
+        "src": "assets/projects/house/ska-60-cover.webp",
+        "alt": "Пример реализованного каркасного дома с мансардой"
+      },
+      "published": true,
+      "example": true,
+      "order": 2
+    },
+    {
+      "id": "completed-bath-example",
+      "type": "photo",
+      "title": "Баня с верандой",
+      "status": "Пример кейса",
+      "image": {
+        "src": "assets/projects/bath/skb-36-cover.webp",
+        "alt": "Пример реализованной каркасной бани с верандой"
+      },
+      "published": true,
+      "example": true,
+      "order": 3
+    },
+    {
+      "id": "completed-gazebo-example",
+      "type": "photo",
+      "title": "Остеклённая беседка",
+      "status": "Пример кейса",
+      "image": {
+        "src": "assets/projects/gazebo/skg-24-cover.webp",
+        "alt": "Пример реализованной остеклённой беседки"
+      },
+      "published": true,
+      "example": true,
+      "order": 4
+    }
+  ]
+}

@@ -792,9 +792,52 @@ blockquote {
   line-height: 1.5;
 }
 
+.project-category-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.project-category-tab {
+  min-height: 88px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-medium);
+  color: var(--ink);
+  background: var(--paper);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.project-category-tab:hover {
+  border-color: rgb(23 62 50 / 46%);
+  transform: translateY(-2px);
+}
+
+.project-category-tab[aria-selected="true"] {
+  border-color: var(--forest);
+  color: var(--white);
+  background: var(--forest);
+}
+
+.project-category-label {
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-weight: 620;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: start;
   gap: 16px;
 }
@@ -1147,6 +1190,33 @@ body.project-dialog-open {
   margin-bottom: 0;
   color: var(--muted);
   font-size: 14px;
+}
+
+.project-dialog-features {
+  margin: 16px 0 0;
+  padding: 14px 0 0 18px;
+  display: grid;
+  gap: 7px;
+  border-top: 1px solid rgb(23 62 50 / 14%);
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.content-empty,
+.content-load-error {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-medium);
+  color: var(--muted);
+  background: var(--paper);
+}
+
+.content-load-error {
+  color: #7f2f2f;
+  border-color: rgb(127 47 47 / 24%);
+  background: #fff6f4;
 }
 
 .project-dialog-select {
@@ -1534,7 +1604,8 @@ body.project-dialog-open {
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center;
 }
 
 .review-media figcaption {
@@ -3518,6 +3589,21 @@ body.project-dialog-open {
     margin-left: 0;
   }
 
+  .project-category-tabs {
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .project-category-tab {
+    min-height: 72px;
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .project-category-label {
+    font-size: 18px;
+  }
+
   .project-grid {
     grid-template-columns: 1fr;
   }
@@ -3717,6 +3803,15 @@ body.project-dialog-open {
 }
 
 @media (max-width: 420px) {
+  .project-category-tab {
+    min-height: 66px;
+    padding: 12px 10px;
+  }
+
+  .project-category-label {
+    font-size: 16px;
+  }
+
   .review-carousel-controls .carousel-progress {
     display: none;
   }

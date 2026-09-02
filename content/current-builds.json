@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "build-skt-65",
+      "projectCode": "СКТ–65",
+      "status": "Демонстрационный объект",
+      "stage": "Монтаж внешней отделки",
+      "area": 65.68,
+      "image": {
+        "src": "assets/projects/house/skt-65-cover.webp",
+        "alt": "Каркасный дом СКТ–65 на загородном участке"
+      },
+      "published": true,
+      "example": true,
+      "order": 1
+    },
+    {
+      "id": "build-skb-36",
+      "projectCode": "СКБ–36",
+      "status": "Демонстрационный объект",
+      "stage": "Устройство кровли",
+      "area": 36,
+      "image": {
+        "src": "assets/projects/bath/skb-36-cover.webp",
+        "alt": "Каркасная баня СКБ–36 с верандой"
+      },
+      "published": true,
+      "example": true,
+      "order": 2
+    },
+    {
+      "id": "build-skg-24",
+      "projectCode": "СКГ–24",
+      "status": "Демонстрационный объект",
+      "stage": "Монтаж остекления",
+      "area": 24,
+      "image": {
+        "src": "assets/projects/gazebo/skg-24-cover.webp",
+        "alt": "Остеклённая беседка СКГ–24 на участке"
+      },
+      "published": true,
+      "example": true,
+      "order": 3
+    }
+  ]
+}
