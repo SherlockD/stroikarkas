@@ -1029,7 +1029,7 @@
     },
     {
       root: ".type-list",
-      items: ":scope > details",
+      items: ":scope > .type-item",
       stagger: 80,
       cycle: 3,
     },

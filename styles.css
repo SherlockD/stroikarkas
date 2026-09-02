@@ -43,8 +43,7 @@ body {
 
 body,
 a,
-button,
-summary {
+button {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -722,22 +721,16 @@ blockquote {
   border-top: 1px solid var(--ink);
 }
 
-.type-list details {
+.type-item {
   border-bottom: 1px solid var(--line);
 }
 
-.type-list summary {
+.type-row {
   min-height: 120px;
   display: grid;
-  grid-template-columns: 80px minmax(260px, 1fr) minmax(210px, 0.45fr) 40px;
+  grid-template-columns: 80px minmax(260px, 1fr) minmax(210px, 0.45fr);
   align-items: center;
   gap: 18px;
-  cursor: pointer;
-  list-style: none;
-}
-
-.type-list summary::-webkit-details-marker {
-  display: none;
 }
 
 .type-index {
@@ -747,6 +740,7 @@ blockquote {
 }
 
 .type-name {
+  margin-bottom: 0;
   font-size: clamp(29px, 4vw, 48px);
   font-weight: 570;
   letter-spacing: -0.045em;
@@ -756,37 +750,9 @@ blockquote {
   color: var(--muted);
 }
 
-.type-toggle {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-}
-
-.type-toggle::before,
-.type-toggle::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 12px;
-  height: 1px;
-  background: var(--ink);
-  translate: -50% -50%;
-}
-
-.type-toggle::after {
-  rotate: 90deg;
-}
-
-details[open] .type-toggle::after {
-  display: none;
-}
-
 .type-body {
   display: grid;
-  grid-template-columns: 80px minmax(0, 1fr) minmax(210px, 0.45fr) 40px;
+  grid-template-columns: 80px minmax(0, 1fr) minmax(210px, 0.45fr);
   gap: 18px;
   padding-bottom: 42px;
 }
@@ -1611,21 +1577,7 @@ body.project-dialog-open {
 }
 
 .process-title {
-  display: grid;
-  grid-template-columns: 44px 1fr;
-  align-items: start;
-  gap: 28px;
   margin-bottom: 58px;
-}
-
-.process-title > span {
-  color: var(--lime);
-  font-size: 12px;
-  font-weight: 750;
-}
-
-.process-block-light .process-title > span {
-  color: var(--forest);
 }
 
 .process-title h3 {
@@ -3534,9 +3486,9 @@ body.project-dialog-open {
     font-size: clamp(42px, 13.5vw, 60px);
   }
 
-  .type-list summary {
+  .type-row {
     min-height: 96px;
-    grid-template-columns: 44px minmax(0, 1fr) 36px;
+    grid-template-columns: 44px minmax(0, 1fr);
     gap: 12px;
   }
 
@@ -3681,11 +3633,6 @@ body.project-dialog-open {
 
   .process-block {
     padding: 34px 20px 20px;
-  }
-
-  .process-title {
-    grid-template-columns: 34px 1fr;
-    gap: 10px;
   }
 
   .steps {
