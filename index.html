@@ -559,7 +559,7 @@
                     <span data-step-name>Тип постройки</span>
                   </p>
                 </div>
-                <span class="estimate-demo-badge">Демо · без отправки</span>
+                <span class="estimate-demo-badge">Заявка онлайн</span>
               </div>
 
               <div
@@ -573,7 +573,15 @@
                 <span data-progress-bar></span>
               </div>
 
-              <form class="estimate-form" id="estimate-form" method="post" novalidate>
+              <form
+                class="estimate-form"
+                id="estimate-form"
+                method="post"
+                novalidate
+                data-submit-endpoint="https://functions.yandexcloud.net/d4ev8b084vfr5q6io1i4"
+                data-smartcaptcha-sitekey="ysc1_GBGyiyjl0BpS6jaD6DtQyvlyovMaqXjOraINl6eh75479a7d"
+                data-consent-version="03.09.2026"
+              >
               <fieldset class="form-step is-active" data-step="1" data-step-name="Тип постройки">
                 <legend>Что хотите построить?</legend>
                 <p class="form-step-intro">Выберите один вариант - дальше покажем только подходящие вопросы.</p>
@@ -844,13 +852,32 @@
                   </label>
                 </div>
 
-                <label class="consent-field">
-                  <input type="checkbox" name="consent" required />
-                  <span>Согласен на обработку данных для подготовки расчёта и обратной связи.</span>
-                </label>
+                <div class="consent-field">
+                  <input
+                    id="personal-data-consent"
+                    type="checkbox"
+                    name="consent"
+                    value="03.09.2026"
+                    aria-describedby="personal-data-notice"
+                    required
+                  />
+                  <div class="consent-field-copy">
+                    <label for="personal-data-consent">
+                      Я даю согласие на обработку персональных данных для подготовки расчёта и обратной связи.
+                    </label>
+                    <a href="consent.html" target="_blank" rel="noopener noreferrer">Прочитать согласие</a>
+                  </div>
+                </div>
 
-                <p class="form-demo-note">Сейчас это визуальный макет: данные никуда не отправляются.</p>
+                <p class="privacy-notice" id="personal-data-notice">
+                  Порядок обработки и хранения данных описан в
+                  <a href="privacy.html" target="_blank" rel="noopener noreferrer">Политике обработки персональных данных</a>.
+                </p>
 
+                <p class="form-demo-note">Отправим заявку специалисту для подготовки предварительного расчёта.</p>
+
+                <div id="estimate-captcha" class="estimate-captcha"></div>
+                <p class="form-submit-status" data-form-submit-status role="status" aria-live="polite"></p>
                 <p class="form-step-error" role="alert" hidden></p>
 
                 <div class="form-actions">
@@ -862,9 +889,9 @@
 
               <div class="estimate-success" data-form-success role="status" aria-live="polite" hidden tabindex="-1">
                 <span class="success-mark" aria-hidden="true">✓</span>
-                <p class="estimate-kicker">Демо-режим</p>
-                <h3>Форма заполнена.</h3>
-                <p>Данные собраны, но не отправлены. Серверный обработчик подключим после согласования макета.</p>
+                <p class="estimate-kicker">Заявка отправлена</p>
+                <h3>Спасибо за заявку.</h3>
+                <p>Специалист изучит параметры, уточнит детали и подготовит предварительный расчёт.</p>
                 <button class="button button-quiet" type="button" data-form-reset>Заполнить ещё раз</button>
               </div>
             </div>
@@ -1041,8 +1068,14 @@
           </span>
           <span>СтройКаркас</span>
         </a>
-        <p>Строительство садовых домов и бань из деревянного каркаса.</p>
-        <p>© 2026 СтройКаркас</p>
+        <div class="footer-copy">
+          <p>Строительство садовых домов и бань из деревянного каркаса.</p>
+          <nav class="footer-legal-links" aria-label="Правовая информация">
+            <a href="privacy.html">Политика обработки персональных данных</a>
+            <a href="consent.html">Согласие на обработку персональных данных</a>
+          </nav>
+        </div>
+        <p class="footer-copyright">© 2026 СтройКаркас</p>
       </div>
     </footer>
 
@@ -1058,6 +1091,10 @@
     </a>
 
     <script src="script.js"></script>
+    <script
+      src="https://smartcaptcha.cloud.yandex.ru/captcha.js?render=onload&amp;onload=onSmartCaptchaReady"
+      defer
+    ></script>
     <script src="content-loader.js"></script>
   </body>
 </html>

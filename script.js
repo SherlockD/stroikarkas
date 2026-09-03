@@ -1,3 +1,9 @@
+window.__smartCaptchaReady = false;
+window.onSmartCaptchaReady = () => {
+  window.__smartCaptchaReady = true;
+  window.__initializeSmartCaptcha?.();
+};
+
 window.initializeStroikarkas = () => {
   if (window.__stroikarkasInitialized) {
     return;
@@ -669,6 +675,9 @@ window.initializeStroikarkas = () => {
   const success = card.querySelector("[data-form-success]");
   const resetButton = card.querySelector("[data-form-reset]");
   const questionnaire = card.querySelector("[data-estimate-questionnaire]");
+  const submitStatus = form.querySelector("[data-form-submit-status]");
+  const submitEndpoint = form.dataset.submitEndpoint;
+  const smartCaptchaSiteKey = form.dataset.smartcaptchaSitekey;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   const objectTitles = {
@@ -685,6 +694,19 @@ window.initializeStroikarkas = () => {
 
   let currentStep = 1;
   let selectedCatalogProject = null;
+  let captchaWidgetId = null;
+  let pendingSubmission = null;
+  let isSubmitting = false;
+  let hasHandledCaptchaToken = false;
+  let captchaGeneration = 0;
+  let activeAttemptId = 0;
+  let captchaWatchdog = null;
+  let activeFetch = null;
+
+  const CAPTCHA_TIMEOUT_MS = 60000;
+  const CHALLENGE_TIMEOUT_MS = 300000;
+  const FETCH_TIMEOUT_MS = 50000;
+  const CONSENT_VERSION = "2026-09-03";
 
   const getStep = (number) => steps.find((step) => Number(step.dataset.step) === number);
 
@@ -703,6 +725,466 @@ window.initializeStroikarkas = () => {
     if (error) {
       error.hidden = true;
       error.textContent = "";
+    }
+  };
+
+  const setSubmitStatus = (message) => {
+    submitStatus.textContent = message;
+  };
+
+  const setSubmittingState = (busy, message = "") => {
+    questionnaire.setAttribute("aria-busy", String(busy));
+    questionnaire.classList.toggle("is-busy", busy);
+    form.querySelectorAll('.form-back, button[type="submit"]').forEach((button) => {
+      button.disabled = busy;
+    });
+    setSubmitStatus(message);
+  };
+
+  const showSubmissionError = (message) => {
+    const error = getStep(5).querySelector(".form-step-error");
+
+    if (error) {
+      error.textContent = message;
+      error.hidden = false;
+    }
+  };
+
+  const clearCaptchaWatchdog = () => {
+    if (captchaWatchdog !== null) {
+      window.clearTimeout(captchaWatchdog.timerId);
+      captchaWatchdog = null;
+    }
+  };
+
+  const scheduleCaptchaWatchdog = (
+    attemptId,
+    widgetGeneration,
+    widgetId,
+    timeout,
+    message,
+  ) => {
+    clearCaptchaWatchdog();
+
+    const watchdog = {
+      attemptId,
+      widgetGeneration,
+      widgetId,
+      timerId: null,
+    };
+    captchaWatchdog = watchdog;
+    watchdog.timerId = window.setTimeout(() => {
+      if (
+        captchaWatchdog !== watchdog ||
+        getActiveCaptchaAttempt(watchdog.widgetGeneration, watchdog.widgetId) !==
+          watchdog.attemptId
+      ) {
+        return;
+      }
+
+      failSubmission(watchdog.attemptId, message);
+    }, timeout);
+  };
+
+  const releaseFetchState = (fetchState, { abort = false } = {}) => {
+    if (!fetchState || activeFetch !== fetchState) {
+      return false;
+    }
+
+    if (fetchState.watchdogId !== null) {
+      window.clearTimeout(fetchState.watchdogId);
+      fetchState.watchdogId = null;
+    }
+
+    if (abort) {
+      fetchState.controller.abort();
+    }
+
+    activeFetch = null;
+    return true;
+  };
+
+  const isActiveAttempt = (attemptId) =>
+    isSubmitting && activeAttemptId === attemptId && pendingSubmission !== null;
+
+  const invalidateAttempt = () => {
+    activeAttemptId += 1;
+    clearCaptchaWatchdog();
+    releaseFetchState(activeFetch, { abort: true });
+    pendingSubmission = null;
+    isSubmitting = false;
+    hasHandledCaptchaToken = false;
+  };
+
+  const value = (name) => {
+    const control = form.elements.namedItem(name);
+
+    return control?.value ?? "";
+  };
+
+  const checkedValue = (name) =>
+    form.querySelector(`input[name="${name}"]:checked`)?.value ?? "";
+
+  const checkedValues = (name) =>
+    Array.from(form.querySelectorAll(`input[name="${name}"]:checked`), (input) => input.value);
+
+  const buildSubmission = () => {
+    const buildingType = checkedValue("building_type");
+    const projectState = checkedValue("project_state");
+    const isHouse = buildingType === "house";
+    const isBath = buildingType === "bath";
+    const isGazebo = buildingType === "gazebo";
+    const hasProjectReference = projectState === "catalog" || projectState === "reference";
+
+    return {
+      building_type: buildingType,
+      house_area: isHouse ? value("house_area") : "",
+      house_floors: isHouse ? value("house_floors") : "",
+      house_use: isHouse ? value("house_use") : "",
+      house_rooms: isHouse ? value("house_rooms") : "",
+      house_options: isHouse ? checkedValues("house_options") : [],
+      bath_length: isBath ? value("bath_length") : "",
+      bath_width: isBath ? value("bath_width") : "",
+      bath_rooms: isBath ? value("bath_rooms") : "",
+      bath_options: isBath ? checkedValues("bath_options") : [],
+      gazebo_type: isGazebo ? value("gazebo_type") : "",
+      gazebo_length: isGazebo ? value("gazebo_length") : "",
+      gazebo_width: isGazebo ? value("gazebo_width") : "",
+      gazebo_options: isGazebo ? checkedValues("gazebo_options") : [],
+      project_state: projectState,
+      project_reference: hasProjectReference ? value("project_reference") : "",
+      location: value("location"),
+      plot_state: value("plot_state"),
+      start_time: value("start_time"),
+      comment: value("comment"),
+      name: value("name"),
+      phone: value("phone"),
+      email: value("email"),
+      contact_method: value("contact_method"),
+      consent: form.elements.consent.checked,
+      consent_version: CONSENT_VERSION,
+    };
+  };
+
+  const completeSubmission = (attemptId) => {
+    if (!isActiveAttempt(attemptId)) {
+      return;
+    }
+
+    invalidateAttempt();
+    setSubmittingState(false);
+    form.hidden = true;
+    success.hidden = false;
+    currentStepLabel.textContent = "5";
+    stepNameLabel.textContent = "Заявка отправлена";
+    progress.setAttribute("aria-valuenow", "5");
+    progressBar.style.width = "100%";
+    success.focus({ preventScroll: true });
+  };
+
+  const resetCaptcha = ({ recreate = false } = {}) => {
+    const widgetId = captchaWidgetId;
+    captchaWidgetId = null;
+    captchaGeneration += 1;
+
+    if (widgetId !== null) {
+      try {
+        window.smartCaptcha?.reset?.(widgetId);
+      } catch {
+        // Continue cleanup: a broken widget must not keep the form blocked.
+      }
+
+      try {
+        window.smartCaptcha?.destroy?.(widgetId);
+      } catch {
+        // The new generation will render a fresh widget when the API is available.
+      }
+    }
+
+    if (recreate) {
+      initializeCaptcha();
+    }
+  };
+
+  const failSubmission = (attemptId, message) => {
+    if (!isActiveAttempt(attemptId)) {
+      return;
+    }
+
+    invalidateAttempt();
+    setSubmittingState(false);
+    resetCaptcha({ recreate: true });
+    showSubmissionError(message);
+  };
+
+  const handleCaptchaToken = async (widgetGeneration, token) => {
+    const attemptId = activeAttemptId;
+
+    if (
+      widgetGeneration !== captchaGeneration ||
+      !isActiveAttempt(attemptId) ||
+      hasHandledCaptchaToken
+    ) {
+      return;
+    }
+
+    if (!token) {
+      failSubmission(attemptId, "Не удалось подтвердить, что вы не робот. Попробуйте ещё раз.");
+      return;
+    }
+
+    hasHandledCaptchaToken = true;
+    const submission = pendingSubmission;
+    clearCaptchaWatchdog();
+    setSubmittingState(true, "Отправляем заявку…");
+
+    const fetchState = {
+      attemptId,
+      controller: new AbortController(),
+      watchdogId: null,
+    };
+    activeFetch = fetchState;
+    fetchState.watchdogId = window.setTimeout(() => {
+      if (activeFetch !== fetchState) {
+        return;
+      }
+
+      failSubmission(
+        attemptId,
+        "Сервис отправки не ответил вовремя. Попробуйте ещё раз.",
+      );
+    }, FETCH_TIMEOUT_MS);
+
+    let response;
+
+    try {
+      response = await fetch(submitEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...submission, smart_token: token }),
+        signal: fetchState.controller.signal,
+      });
+    } catch {
+      if (isActiveAttempt(attemptId) && pendingSubmission === submission) {
+        failSubmission(
+          attemptId,
+          "Не удалось отправить заявку. Проверьте соединение и попробуйте ещё раз.",
+        );
+      }
+      return;
+    }
+
+    if (!isActiveAttempt(attemptId) || pendingSubmission !== submission) {
+      return;
+    }
+
+    let result;
+
+    try {
+      result = await response.json();
+    } catch {
+      failSubmission(attemptId, "Не удалось обработать ответ сервера. Попробуйте ещё раз.");
+      return;
+    } finally {
+      releaseFetchState(fetchState);
+    }
+
+    if (response.ok && result?.success === true) {
+      completeSubmission(attemptId);
+      return;
+    }
+
+    failSubmission(
+      attemptId,
+      typeof result?.error === "string" && result.error.trim()
+        ? result.error
+        : "Не удалось отправить заявку. Попробуйте ещё раз.",
+    );
+  };
+
+  const getActiveCaptchaAttempt = (widgetGeneration, widgetId) => {
+    const attemptId = activeAttemptId;
+
+    if (
+      widgetGeneration !== captchaGeneration ||
+      widgetId !== captchaWidgetId ||
+      !isActiveAttempt(attemptId) ||
+      hasHandledCaptchaToken
+    ) {
+      return null;
+    }
+
+    return attemptId;
+  };
+
+  const handleCaptchaFailure = (widgetGeneration, widgetId, message) => {
+    const attemptId = getActiveCaptchaAttempt(widgetGeneration, widgetId);
+
+    if (attemptId === null) {
+      return;
+    }
+
+    failSubmission(attemptId, message);
+  };
+
+  const handleCaptchaChallengeVisible = (widgetGeneration, widgetId) => {
+    const attemptId = getActiveCaptchaAttempt(widgetGeneration, widgetId);
+
+    if (attemptId === null) {
+      return;
+    }
+
+    scheduleCaptchaWatchdog(
+      attemptId,
+      widgetGeneration,
+      widgetId,
+      CHALLENGE_TIMEOUT_MS,
+      "Проверка не была завершена вовремя. Попробуйте ещё раз.",
+    );
+    setSubmitStatus("Завершите проверку, чтобы отправить заявку.");
+  };
+
+  const getCaptchaResponse = (widgetId) => {
+    if (typeof window.smartCaptcha?.getResponse !== "function") {
+      return "";
+    }
+
+    try {
+      return window.smartCaptcha.getResponse(widgetId) || "";
+    } catch {
+      return "";
+    }
+  };
+
+  const handleCaptchaChallengeHidden = (widgetGeneration, widgetId) => {
+    const attemptId = getActiveCaptchaAttempt(widgetGeneration, widgetId);
+
+    if (attemptId === null) {
+      return;
+    }
+
+    window.setTimeout(() => {
+      if (getActiveCaptchaAttempt(widgetGeneration, widgetId) !== attemptId) {
+        return;
+      }
+
+      const token = getCaptchaResponse(widgetId);
+
+      if (token) {
+        handleCaptchaToken(widgetGeneration, token);
+        return;
+      }
+
+      failSubmission(
+        attemptId,
+        "Проверка была закрыта до завершения. Попробуйте ещё раз.",
+      );
+    }, 0);
+  };
+
+  const initializeCaptcha = () => {
+    if (
+      captchaWidgetId !== null ||
+      currentStep !== 5 ||
+      typeof window.smartCaptcha?.render !== "function" ||
+      !smartCaptchaSiteKey
+    ) {
+      return;
+    }
+
+    const widgetGeneration = ++captchaGeneration;
+
+    try {
+      const widgetId = window.smartCaptcha.render("estimate-captcha", {
+        sitekey: smartCaptchaSiteKey,
+        invisible: true,
+        hl: "ru",
+        callback: (token) => handleCaptchaToken(widgetGeneration, token),
+      });
+
+      if (widgetId === null || widgetId === undefined) {
+        throw new Error("SmartCaptcha did not return a widget ID.");
+      }
+
+      captchaWidgetId = widgetId;
+
+      if (typeof window.smartCaptcha.subscribe === "function") {
+        window.smartCaptcha.subscribe(widgetId, "network-error", () => {
+          handleCaptchaFailure(
+            widgetGeneration,
+            widgetId,
+            "Не удалось пройти проверку. Проверьте соединение и попробуйте ещё раз.",
+          );
+        });
+        window.smartCaptcha.subscribe(widgetId, "javascript-error", () => {
+          handleCaptchaFailure(
+            widgetGeneration,
+            widgetId,
+            "Не удалось выполнить проверку. Попробуйте ещё раз.",
+          );
+        });
+        window.smartCaptcha.subscribe(widgetId, "token-expired", () => {
+          handleCaptchaFailure(
+            widgetGeneration,
+            widgetId,
+            "Срок проверки истёк. Попробуйте ещё раз.",
+          );
+        });
+        window.smartCaptcha.subscribe(widgetId, "success", (token) => {
+          const resolvedToken = typeof token === "string" ? token : getCaptchaResponse(widgetId);
+
+          if (resolvedToken) {
+            handleCaptchaToken(widgetGeneration, resolvedToken);
+          }
+        });
+        window.smartCaptcha.subscribe(widgetId, "challenge-visible", () => {
+          handleCaptchaChallengeVisible(widgetGeneration, widgetId);
+        });
+        window.smartCaptcha.subscribe(widgetId, "challenge-hidden", () => {
+          handleCaptchaChallengeHidden(widgetGeneration, widgetId);
+        });
+      }
+    } catch {
+      captchaWidgetId = null;
+    }
+  };
+
+  window.__initializeSmartCaptcha = initializeCaptcha;
+
+  const startSubmission = () => {
+    if (isSubmitting) {
+      return;
+    }
+
+    if (
+      !submitEndpoint ||
+      !smartCaptchaSiteKey ||
+      captchaWidgetId === null ||
+      typeof window.smartCaptcha?.execute !== "function"
+    ) {
+      showSubmissionError("Проверка отправки пока недоступна. Попробуйте ещё раз чуть позже.");
+      return;
+    }
+
+    const attemptId = activeAttemptId + 1;
+    activeAttemptId = attemptId;
+    pendingSubmission = buildSubmission();
+    isSubmitting = true;
+    hasHandledCaptchaToken = false;
+    clearStepError(getStep(5));
+    setSubmittingState(true, "Проверяем отправку…");
+    scheduleCaptchaWatchdog(
+      attemptId,
+      captchaGeneration,
+      captchaWidgetId,
+      CAPTCHA_TIMEOUT_MS,
+      "Проверка не ответила вовремя. Попробуйте ещё раз.",
+    );
+
+    try {
+      window.smartCaptcha.execute(captchaWidgetId);
+    } catch {
+      failSubmission(attemptId, "Не удалось начать проверку. Попробуйте ещё раз.");
     }
   };
 
@@ -852,6 +1334,7 @@ window.initializeStroikarkas = () => {
 
     if (currentStep === 5) {
       syncContactMethod();
+      initializeCaptcha();
     }
 
     updateProgress(currentStep);
@@ -1070,13 +1553,14 @@ window.initializeStroikarkas = () => {
       return;
     }
 
-    form.hidden = true;
-    success.hidden = false;
-    currentStepLabel.textContent = "5";
-    stepNameLabel.textContent = "Макет заполнен";
-    progress.setAttribute("aria-valuenow", "5");
-    progressBar.style.width = "100%";
-    success.focus({ preventScroll: true });
+    startSubmission();
+  });
+
+  form.addEventListener("reset", () => {
+    invalidateAttempt();
+    setSubmittingState(false);
+    resetCaptcha({ recreate: currentStep === 5 && !form.hidden });
+    clearStepError(getStep(5));
   });
 
   resetButton.addEventListener("click", () => {
