@@ -2012,6 +2012,19 @@ body.project-dialog-open {
   gap: 70px;
 }
 
+.site-placeholder-copy h2 {
+  margin-bottom: 30px;
+  font-size: clamp(46px, 4.7vw, 60px);
+}
+
+.site-placeholder-lead {
+  max-width: 430px;
+  margin-bottom: 0;
+  color: rgb(255 255 255 / 68%);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
 .construction-carousel {
   position: relative;
   min-width: 0;
@@ -3314,6 +3327,13 @@ body.project-dialog-open {
 
   .steps-build h4 {
     font-size: 18px;
+  }
+}
+
+@media (max-width: 800px) {
+  .placeholder-inner {
+    grid-template-columns: 1fr;
+    gap: 42px;
   }
 }
 
