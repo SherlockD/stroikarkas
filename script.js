@@ -706,7 +706,7 @@ window.initializeStroikarkas = () => {
   const CAPTCHA_TIMEOUT_MS = 60000;
   const CHALLENGE_TIMEOUT_MS = 300000;
   const FETCH_TIMEOUT_MS = 50000;
-  const CONSENT_VERSION = "2026-09-03";
+  const CONSENT_VERSION = form.dataset.consentVersion?.trim() ?? "";
 
   const getStep = (number) => steps.find((step) => Number(step.dataset.step) === number);
 
@@ -732,9 +732,12 @@ window.initializeStroikarkas = () => {
     submitStatus.textContent = message;
   };
 
-  const setSubmittingState = (busy, message = "") => {
+  const setSubmittingState = (busy, message = "", { lockFields = false } = {}) => {
     questionnaire.setAttribute("aria-busy", String(busy));
     questionnaire.classList.toggle("is-busy", busy);
+    steps.forEach((step) => {
+      step.disabled = busy && lockFields;
+    });
     form.querySelectorAll('.form-back, button[type="submit"]').forEach((button) => {
       button.disabled = busy;
     });
@@ -928,15 +931,31 @@ window.initializeStroikarkas = () => {
       return;
     }
 
+    if (currentStep !== 5 || form.hidden) {
+      invalidateAttempt();
+      setSubmittingState(false);
+      resetCaptcha({ recreate: currentStep === 5 && !form.hidden });
+      return;
+    }
+
     if (!token) {
       failSubmission(attemptId, "Не удалось подтвердить, что вы не робот. Попробуйте ещё раз.");
       return;
     }
 
     hasHandledCaptchaToken = true;
-    const submission = pendingSubmission;
     clearCaptchaWatchdog();
-    setSubmittingState(true, "Отправляем заявку…");
+
+    if (!validateStep(5)) {
+      invalidateAttempt();
+      setSubmittingState(false);
+      resetCaptcha({ recreate: true });
+      return;
+    }
+
+    const submission = buildSubmission();
+    pendingSubmission = submission;
+    setSubmittingState(true, "Отправляем заявку…", { lockFields: true });
 
     const fetchState = {
       attemptId,
@@ -1159,6 +1178,7 @@ window.initializeStroikarkas = () => {
     if (
       !submitEndpoint ||
       !smartCaptchaSiteKey ||
+      !CONSENT_VERSION ||
       captchaWidgetId === null ||
       typeof window.smartCaptcha?.execute !== "function"
     ) {
@@ -1168,7 +1188,9 @@ window.initializeStroikarkas = () => {
 
     const attemptId = activeAttemptId + 1;
     activeAttemptId = attemptId;
-    pendingSubmission = buildSubmission();
+    // Keep only an attempt marker while SmartCaptcha is running. The current
+    // form values are validated and collected after the CAPTCHA succeeds.
+    pendingSubmission = {};
     isSubmitting = true;
     hasHandledCaptchaToken = false;
     clearStepError(getStep(5));
@@ -1466,7 +1488,7 @@ window.initializeStroikarkas = () => {
   document.addEventListener("catalog-project-select", (event) => {
     const project = event.detail;
 
-    if (!project?.code || !project?.buildingType) {
+    if (isSubmitting || !project?.code || !project?.buildingType) {
       return;
     }
 
