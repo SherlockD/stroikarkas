@@ -3492,7 +3492,7 @@ body.project-dialog-open {
   }
 
   .hero h1 {
-    font-size: clamp(44px, 13.5vw, 60px);
+    font-size: clamp(38px, 11.5vw, 60px);
   }
 
   .hero-lead {
