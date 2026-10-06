@@ -11,7 +11,7 @@
         "src": "assets/projects/house/skt-65-cover.webp",
         "alt": "Каркасный дом СКТ–65 на загородном участке"
       },
-      "published": true,
+      "published": false,
       "example": true,
       "order": 1
     },
@@ -25,7 +25,7 @@
         "src": "assets/projects/bath/skb-36-cover.webp",
         "alt": "Каркасная баня СКБ–36 с верандой"
       },
-      "published": true,
+      "published": false,
       "example": true,
       "order": 2
     },
@@ -39,9 +39,23 @@
         "src": "assets/projects/gazebo/skg-24-cover.webp",
         "alt": "Остеклённая беседка СКГ–24 на участке"
       },
-      "published": true,
+      "published": false,
       "example": true,
       "order": 3
+    },
+    {
+      "id": "build-skd-14-roof",
+      "projectCode": "СКД–14",
+      "status": "Строим в СНТ Тарханово",
+      "stage": "Сборка стропильной системы",
+      "area": 13.50,
+      "image": {
+        "src": "assets/construction/skd-14-roof.webp",
+        "alt": "Сборка стропильной системы беседки СКД-14"
+      },
+      "published": true,
+      "example": false,
+      "order": 4
     }
   ]
 }
