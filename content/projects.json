@@ -26,7 +26,7 @@
       "features": [
         "Два этажа",
         "Три жилые комнаты",
-        "Габариты около 6 × 6 м"
+        "Габариты 6 × 6 м"
       ],
       "parameters": {
         "floors": "Два этажа",
@@ -68,6 +68,60 @@
       "published": true,
       "example": false,
       "order": 2
+    },
+    {
+      "id": "ska-45",
+      "category": "house",
+      "code": "СКА–45",
+      "area": 45.61,
+      "price": 1420000,
+      "package": "Пример комфортной комплектации",
+      "description": "Дачный каркасный дом с просторной спальней и приятным внешним видом.",
+      "features": [
+        "Один этаж",
+        "Одна жилая комната",
+        "Просторная планировка"
+      ],
+      "parameters": {
+        "floors": "Один этаж",
+        "rooms": 1
+      },
+      "images": [
+        {
+          "src": "assets/projects/house/ska-45-facade.webp",
+          "alt": "Дачный каркасный дом с просторной планировкой и симметричным внешним видом"
+        }
+      ],
+      "published": true,
+      "example": false,
+      "order": 1
+    },
+    {
+      "id": "skm-15",
+      "category": "house",
+      "code": "СКМ–15",
+      "area": 15.21,
+      "price": 647000,
+      "package": "Пример комфортной комплектации",
+      "description": "Садовый каркасный домик для отдыха в перерывах между работой в огороде.",
+      "features": [
+        "Один этаж",
+        "Одна комната",
+        "Отличный вариант для садовых и дачных массивов"
+      ],
+      "parameters": {
+        "floors": "Один этаж",
+        "rooms": 1
+      },
+      "images": [
+        {
+          "src": "assets/projects/house/skm-15-facade.webp",
+          "alt": "Маленький каркасный домик для СНТ"
+        }
+      ],
+      "published": true,
+      "example": false,
+      "order": 3
     },
     {
       "id": "skb-24",
