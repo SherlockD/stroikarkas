@@ -9,9 +9,9 @@
         "src": "assets/construction/frame-assembly-example.webp",
         "alt": "Сборка деревянного каркаса одноэтажного дома на стройплощадке"
       },
-      "published": true,
+      "published": false,
       "example": true,
-      "order": 1
+      "order": 999
     },
     {
       "id": "update-roof-example",
@@ -21,9 +21,9 @@
         "src": "assets/construction/roof-installation-example.webp",
         "alt": "Монтаж металлической кровли на строящемся каркасном доме"
       },
-      "published": true,
+      "published": false,
       "example": true,
-      "order": 2
+      "order": 998
     },
     {
       "id": "update-facade-example",
@@ -33,9 +33,57 @@
         "src": "assets/construction/facade-installation-example.webp",
         "alt": "Монтаж деревянной фасадной отделки на каркасном доме"
       },
-      "published": true,
+      "published": false,
       "example": true,
+      "order": 997
+    },
+    {
+      "id": "build-skt-65-frame",
+      "title": "СКТ-65",
+      "stage": "Сборка каркаса",
+      "image": {
+        "src": "assets/construction/build-skt-65-frame.webp",
+        "alt": "Сборка каркаса по проекту СКТ-65"
+      },
+      "published": true,
+      "example": false,
+      "order": 2
+    },
+    {
+      "id": "build-sko-100-frame",
+      "title": "СКО-100",
+      "stage": "Сборка каркаса",
+      "image": {
+        "src": "assets/construction/build-sko-100-frame.webp",
+        "alt": "Сборка каркаса по проекту СКО-100"
+      },
+      "published": true,
+      "example": false,
       "order": 3
+    },
+    {
+      "id": "build-ska-60-facade",
+      "title": "СКА-60",
+      "stage": "Обшивка дома виниловым сайдингом Docke",
+      "image": {
+        "src": "assets/construction/build-ska-60-facade.webp",
+        "alt": "Обшивка дома сайдингом по проекту СКТ-65"
+      },
+      "published": true,
+      "example": false,
+      "order": 1
+    },
+    {
+      "id": "build-ska-45-frame",
+      "title": "СКА-45",
+      "stage": "Сборка каркаса",
+      "image": {
+        "src": "assets/construction/build-ska-45-frame.webp",
+        "alt": "Сборка каркаса по проекту СКА-45"
+      },
+      "published": true,
+      "example": false,
+      "order": 4
     }
   ]
 }
